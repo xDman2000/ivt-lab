@@ -1,0 +1,18 @@
+Teszt 1
+Négy SINGLE esetén a váltakozást teszteljük 2 primary és 2 secondary.
+
+Teszt 2
+Kettő egymás utáni ALL és egy SINGLE lövésnél megfelelően sülnek-e el a lövések a két Store-ból.
+
+Teszt 3
+Ha a secondary Store üres, akkor kétszer sül-e el a primary 2 SINGLE esetén.
+
+Teszt 4
+Ha üres a primary akkor SINGLE esetén automatikusan a secondary-ből lő e.
+
+Teszt 5
+ALL esetén ha csak a primaryben van töltény akkor csak a primary sül-e el.
+
+
+Teszt 6 kód alapján
+ALL esetén ha csak a primaryben van töltény akkor csak az süljön el és utána egy SINGLE esetén megint a primary
