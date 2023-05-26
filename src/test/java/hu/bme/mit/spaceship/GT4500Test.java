@@ -14,7 +14,7 @@ public class GT4500Test {
   private TorpedoStore secondary;
 
   @BeforeEach
-  public void init(){
+  public void init() {
     primary = mock(TorpedoStore.class);
     secondary = mock(TorpedoStore.class);
 
@@ -85,7 +85,8 @@ public class GT4500Test {
     verify(primary, times(2)).fire(1);
   }
 
-  // Kettő egymás utáni ALL és egy SINGLE lövésnél megfelelően sülnek-e el a lövések a két Store-ból.
+  // Kettő egymás utáni ALL és egy SINGLE lövésnél megfelelően sülnek-e el a
+  // lövések a két Store-ból.
   @Test
   public void fireTwoAllOneSingle(){
     // Arrange
@@ -140,6 +141,12 @@ public class GT4500Test {
     // Act
     ship.fireTorpedo(FiringMode.SINGLE);
 
+    // Arrange
+    when(secondary.isEmpty()).thenReturn(true);
+
+    // Act
+    ship.fireTorpedo(FiringMode.SINGLE);
+
     // Assert
     verify(primary, times(0)).fire(1);
     verify(secondary, times(1)).fire(1);
@@ -160,7 +167,8 @@ public class GT4500Test {
     verify(secondary, times(0)).fire(1);
   }
 
-  // ALL esetén ha csak a primaryben van töltény akkor csak az süljön el és utána ha kerül tölény a secondary-be akkor egy SINGLE esetén az süljön el
+  // ALL esetén ha csak a primaryben van töltény akkor csak az süljön el és utána
+  // ha kerül tölény a secondary-be akkor egy SINGLE esetén az süljön el
   @Test
   public void fireAllWithOnlyPrimaryLoadedAndSingleAfter(){
     // Arrange
@@ -185,4 +193,51 @@ public class GT4500Test {
     verify(primary, times(1)).fire(1);
     verify(secondary, times(1)).fire(1);
   }
+
+  @Test
+  public void fireSingleTwiceWithSecondaryEmpty() {
+    // Arrange
+    when(primary.fire(1)).thenReturn(true);
+    when(secondary.isEmpty()).thenReturn(true);
+
+    // Act
+    ship.fireTorpedo(FiringMode.SINGLE);
+
+    // Arrange
+    when(primary.isEmpty()).thenReturn(true);
+
+    // Act
+    ship.fireTorpedo(FiringMode.SINGLE);
+
+    // Assert
+    verify(primary, times(1)).fire(1);
+    verify(secondary, times(0)).fire(1);
+  }
+
+  @Test
+  public void fireAllWithPrimaryEmpty(){
+    // Arrange
+    when(primary.isEmpty()).thenReturn(true);
+    when(secondary.fire(1)).thenReturn(true);
+
+    // Act
+    ship.fireTorpedo(FiringMode.ALL);
+
+    // Assert
+    verify(primary, times(0)).fire(1);
+    verify(secondary, times(1)).fire(1);
+  }
+
+  @Test
+  public void fireLaser(){
+    // Arrange
+
+    // Act
+    boolean result = ship.fireLaser(FiringMode.SINGLE);
+
+    // Assert
+    verify(primary, times(0)).fire(1);
+    assertEquals(false, result);
+  }
+
 }
